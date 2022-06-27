@@ -1,0 +1,21 @@
+#entry-container {
+    height: 20vh;
+    width: 20vh;
+    position: absolute;
+    top: calc(50% - 10vh);
+    left: calc(50% - 10vh);
+    display: flex;
+    flex-direction: column;
+}
+
+#entry-toggle {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.entry-form-container {
+    height: 90%;
+    width: 100%;
+}
