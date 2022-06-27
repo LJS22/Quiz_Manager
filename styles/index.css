@@ -1,0 +1,54 @@
+span, h1, li {
+    cursor: pointer;
+}
+
+header {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 10px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+header ul {
+    position: absolute;
+    top: 10%;
+    left: 90%;
+}
+
+section {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+}
+
+section h2 {
+    height: 10%;
+}
+
+section div {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+#user-display-info {
+    height: 30%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
