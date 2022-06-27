@@ -11,35 +11,31 @@
 	<body>
 		<div id="entry-container">
 			<div id="entry-toggle">
-				<button>Login</button>
-				<button>Register</button>
+				<button data-form="login-form">Login</button>
+				<button data-form="reg-form">Register</button>
 			</div>
-			<p id="entry-err-message"></p>
-			<div class="entry-form-container" id="login-form-container">
-				<form action="post">
-					<label for="email">Email:</label>
-					<input name="email" type="text" />
-					<label for="password">Password:</label>
-					<input name="password" type="text" />
-					<label for="javascript">JavaScript</label><br /><br />
-					<input type="submit" value="Submit" />
-				</form>
+			<p id="entry-err-message" style="display: none"></p>
+			<div class="entry-form-container active" id="login-form">
+				<label for="email">Email:</label>
+				<input name="email" type="text" />
+				<label for="password">Password:</label>
+				<input name="password" type="text" />
+				<label for="javascript">JavaScript</label><br /><br />
+				<input type="submit" value="Submit" />
 			</div>
-			<div class="entry-form-container" id="reg-form-container">
-				<form action="post">
-					<label for="firstName">Password:</label>
-					<input name="firstName" type="text" />
-					<label for="lastName">Password:</label>
-					<input name="lastName" type="text" />
-					<label for="email">Password:</label>
-					<input name="email" type="text" />
-					<label for="password">Password:</label>
-					<input name="password" type="text" />
-					<label for="confirmPassword">Password:</label>
-					<input name="confirmPassword" type="text" />
-					<label for="javascript">JavaScript</label><br /><br />
-					<input type="submit" value="Submit" />
-				</form>
+			<div class="entry-form-container" id="reg-form">
+				<label for="firstName">Password:</label>
+				<input name="firstName" type="text" />
+				<label for="lastName">Password:</label>
+				<input name="lastName" type="text" />
+				<label for="email">Password:</label>
+				<input name="email" type="text" />
+				<label for="password">Password:</label>
+				<input name="password" type="text" />
+				<label for="confirmPassword">Password:</label>
+				<input name="confirmPassword" type="text" />
+				<label for="javascript">JavaScript</label><br /><br />
+				<input type="submit" value="Submit" />
 			</div>
 		</div>
 
