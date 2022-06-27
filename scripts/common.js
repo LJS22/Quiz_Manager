@@ -1,9 +1,5 @@
 const API_URL = '';
 
-function IsEmptyOrWhiteSpace(str) {
-	return (str.match(/^\s*$/) || []).length > 0;
-}
-
 async function PostData(url, data) {
 	const response = await fetch(url, {
 		method: 'POST',
@@ -13,11 +9,14 @@ async function PostData(url, data) {
 }
 
 function IsEmailValid(email) {
-	return String(email)
-		.toLowerCase()
-		.match(
-			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-		);
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+		return true;
+	}
+	return false;
+}
+
+function IsEmptyOrWhiteSpace(str) {
+	return (str.match(/^\s*$/) || []).length > 0;
 }
 
 function getCookie(cname) {
