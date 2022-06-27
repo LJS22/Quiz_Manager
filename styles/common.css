@@ -1,9 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200&display=swap');
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 500,
+  'GRAD' 200,
+  'opsz' 48
+}
+
 * {
     margin: 0;
     padding: 0;
     font-family: 'Inconsolata', monospace;
+    box-sizing: border-box;
 }
 
 body {
@@ -13,6 +22,10 @@ body {
 
 .active {
     display: block;
+}
+
+.active-flex {
+    display: flex;
 }
 
 .inactive {

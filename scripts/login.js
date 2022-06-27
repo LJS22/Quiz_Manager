@@ -45,7 +45,8 @@ loginFormSubmit.addEventListener('click', function (e) {
 
 	PostData(API_URL + '/login', {email: email, password: password}).then((data) => {
 		if (data.status == 'Success') {
-			setCookie('QM_User', data.userRole, 12);
+			setCookie('QM_UserRole', data.userRole, 12);
+			setCookie('QM_UserId', data.userId, 12);
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/index.html');
 		} else if (data.status == 'Failed') {
 			errorMessage.innerHTML = data.message;
@@ -84,7 +85,8 @@ regFormSubmit.addEventListener('click', function (e) {
 
 	PostData(API_URL + '/register', userInfo).then((data) => {
 		if (data.status == 'Success') {
-			setCookie('QM_User', data.userRole, 12);
+			setCookie('QM_UserRole', data.userRole, 12);
+			setCookie('QM_UserId', data.userId, 12);
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/index.html');
 		} else if (data.status == 'Failed') {
 			errorMessage.innerHTML = data.message;

@@ -8,6 +8,14 @@ async function PostData(url, data) {
 	return response.json();
 }
 
+async function GetData(url, data) {
+	const response = await fetch(url, {
+		method: 'GET',
+		body: JSON.stringify(data),
+	});
+	return response.json();
+}
+
 function IsEmailValid(email) {
 	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
 		return true;
