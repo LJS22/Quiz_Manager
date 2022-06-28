@@ -1,4 +1,5 @@
 let userId = getCookie('QM_UserId');
+let userRole = getCookie('QM_UserRole');
 let quizzes;
 let settingsButton = document.querySelector('header span#settings');
 let logoutButton = document.querySelector('.logout');
@@ -92,26 +93,67 @@ function buildQuizPage(quiz) {
 		let questionEle = document.createElement('h4');
 		questionEle.innerText = Object.keys(question)[0];
 
-		questionWrapper.append(questionEle);
+		inputAndLabel = createTextAndLabelInput(Object.keys(question)[0], 'question');
 
-		if (getCookie('QM_UserRole') === 'User') {
+		questionWrapper.append(questionEle, inputAndLabel[0], inputAndLabel[1]);
+
+		if (userRole !== 'User') {
 			let correctAnswer = document.createElement('p');
 			correctAnswer.innerText = Object.values(question)[0].Correct;
 
-			questionWrapper.append(correctAnswer);
+			inputAndLabel = createTextAndLabelInput(Object.values(question)[0].Correct, 'correctAnswer');
+
+			questionWrapper.append(correctAnswer, inputAndLabel[0], inputAndLabel[1]);
 
 			for (let wrongAnswer of Object.values(question)[0].Wrong) {
 				let wrongAnswerEle = document.createElement('p');
 				wrongAnswerEle.innerText = wrongAnswer;
 
-				questionWrapper.append(wrongAnswerEle);
+				inputAndLabel = createTextAndLabelInput(wrongAnswer, 'wrongAnswer');
+
+				questionWrapper.append(wrongAnswerEle, inputAndLabel[0], inputAndLabel[1]);
 			}
 		}
 
 		questionsContainer.append(questionWrapper);
 	}
 
+	if (userRole === 'GlobalAdmin') {
+		let editButton = document.createElement('button');
+		editButton.innerText = 'Edit Mode';
+
+		editButton.addEventListener('click', enableEditMode);
+
+		questionsContainer.append(editButton);
+	}
+
 	changePage('quiz-page');
+}
+
+function createTextAndLabelInput(value, name) {
+	let input = document.createElement('textarea');
+	input.type = 'text';
+	input.value = value;
+	input.name = name;
+	input.rows = name == 'question' ? '2' : '1';
+	input.columns = name == 'question' ? '50' : '30';
+	input.classList.add('inactive');
+	let label = document.createElement('label');
+	label.for = name;
+	label.classList.add('inactive');
+
+	return [input, label];
+}
+
+function enableEditMode() {
+	document.querySelectorAll('.question-wrapper').forEach((questionWrapper) => {
+		for (let childEle of questionWrapper.childNodes) {
+			if (childEle.nodeName.toLowerCase() == 'textarea' || childEle.nodeName.toLowerCase() == 'label') {
+				childEle.classList.remove('inactive');
+				childEle.classList.add('active');
+			}
+		}
+	});
 }
 
 loadQuizzes();
