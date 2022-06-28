@@ -1,4 +1,4 @@
-const API_URL = '';
+const API_URL = 'https://1xw7ullitl.execute-api.eu-west-1.amazonaws.com/Initial';
 
 async function PostData(url, data) {
 	const response = await fetch(url, {
@@ -8,10 +8,9 @@ async function PostData(url, data) {
 	return response.json();
 }
 
-async function GetData(url, data) {
+async function GetData(url) {
 	const response = await fetch(url, {
 		method: 'GET',
-		body: JSON.stringify(data),
 	});
 	return response.json();
 }
@@ -62,13 +61,13 @@ function setCookie(cname, cvalue, exhours) {
 
 function handleRedirection() {
 	if (window.location.href.includes('index.html')) {
-		if (!checkCookie('QM_User')) {
+		if (!checkCookie('QM_UserRole')) {
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/login.html');
 		}
 	}
 
 	if (window.location.href.includes('login.html')) {
-		if (checkCookie('QM_User')) {
+		if (checkCookie('QM_UserRole')) {
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/index.html');
 		}
 	}

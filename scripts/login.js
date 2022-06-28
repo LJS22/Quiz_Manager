@@ -43,12 +43,13 @@ loginFormSubmit.addEventListener('click', function (e) {
 		return;
 	}
 
-	PostData(API_URL + '/login', {email: email, password: password}).then((data) => {
-		if (data.status == 'Success') {
+	PostData(API_URL + '/loginUser', {email: email, password: password}).then((data) => {
+		data = JSON.parse(data.body);
+		if (data.Status == 'Success') {
 			setCookie('QM_UserRole', data.userRole, 12);
 			setCookie('QM_UserId', data.userId, 12);
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/index.html');
-		} else if (data.status == 'Failed') {
+		} else if (data.Status == 'Failed') {
 			errorMessage.innerHTML = data.message;
 			errorMessage.style.display = 'block';
 		}
@@ -83,12 +84,14 @@ regFormSubmit.addEventListener('click', function (e) {
 
 	let userInfo = {firstName: firstName, lastName: lastName, email: email, password: password};
 
-	PostData(API_URL + '/register', userInfo).then((data) => {
-		if (data.status == 'Success') {
+	PostData(API_URL + '/createuser', userInfo).then((data) => {
+		data = JSON.parse(data.body);
+		if (data.Status == 'Success') {
 			setCookie('QM_UserRole', data.userRole, 12);
 			setCookie('QM_UserId', data.userId, 12);
 			window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/index.html');
-		} else if (data.status == 'Failed') {
+		} else if (data.Status == 'Failed') {
+			console.log(111);
 			errorMessage.innerHTML = data.message;
 			errorMessage.style.display = 'block';
 		}
