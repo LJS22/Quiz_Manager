@@ -73,6 +73,12 @@ section > div {
     cursor: pointer;
 }
 
+#close {
+    position: absolute;
+    top: 10%;
+    left: 95%;
+}
+
 #question-container {
     overflow-y: scroll;
     -ms-overflow-style: none;
@@ -87,4 +93,25 @@ section > div {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+}
+
+#edit-buttons {
+    height: 3%;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#edit-buttons button {
+    height: 100%;
+    width: 50%;
+}
+
+textarea#wrongAnswer {
+    border: 1px solid red;
+}
+
+textarea#correctAnswer {
+    border: 1px solid green;
 }

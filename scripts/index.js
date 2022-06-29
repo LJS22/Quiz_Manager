@@ -4,11 +4,16 @@ let quizzes;
 let settingsButton = document.querySelector('header span#settings');
 let logoutButton = document.querySelector('.logout');
 let quizContainer = document.querySelector('#quiz-list');
+let closeButton = document.querySelector('#close');
 
 logoutButton.addEventListener('click', function (e) {
 	document.cookie = 'QM_UserRole' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite;';
 	document.cookie = 'QM_UserId' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite;';
 	window.location.replace(window.location.href.substr(0, window.location.href.lastIndexOf('/')) + '/login.html');
+});
+
+closeButton.addEventListener('click', function (e) {
+	changePage('home-page');
 });
 
 function changePage(pageId) {
@@ -84,6 +89,7 @@ function buildQuizPage(quiz) {
 	questionsContainer.innerHTML = '';
 
 	let title = document.querySelector('section#quiz-page h2');
+	title.id = quiz.quizId;
 	title.innerText = quiz.quizName;
 
 	for (let question of quiz.quizContent) {
@@ -100,6 +106,8 @@ function buildQuizPage(quiz) {
 		if (userRole !== 'User') {
 			let correctAnswer = document.createElement('p');
 			correctAnswer.innerText = Object.values(question)[0].Correct;
+			correctAnswer.setAttribute('data-question', Object.keys(question)[0]);
+			correctAnswer.id = 'Correct';
 
 			inputAndLabel = createTextAndLabelInput(Object.values(question)[0].Correct, 'correctAnswer');
 
@@ -108,6 +116,8 @@ function buildQuizPage(quiz) {
 			for (let wrongAnswer of Object.values(question)[0].Wrong) {
 				let wrongAnswerEle = document.createElement('p');
 				wrongAnswerEle.innerText = wrongAnswer;
+				wrongAnswerEle.setAttribute('data-question', Object.keys(question)[0]);
+				wrongAnswerEle.id = 'wrong';
 
 				inputAndLabel = createTextAndLabelInput(wrongAnswer, 'wrongAnswer');
 
@@ -119,12 +129,30 @@ function buildQuizPage(quiz) {
 	}
 
 	if (userRole === 'GlobalAdmin') {
+		let editWrapper = document.createElement('div');
+		editWrapper.id = 'edit-buttons';
+
+		let cancelButton = document.createElement('button');
+		cancelButton.classList.add('inactive');
+		cancelButton.id = 'cancel-edit';
+		cancelButton.innerText = 'Cancel Edit';
+
 		let editButton = document.createElement('button');
+		editButton.id = 'enable-edit';
 		editButton.innerText = 'Edit Mode';
 
-		editButton.addEventListener('click', enableEditMode);
+		let saveButton = document.createElement('button');
+		saveButton.classList.add('inactive');
+		saveButton.id = 'save-edit';
+		saveButton.innerText = 'Save Changes';
 
-		questionsContainer.append(editButton);
+		editButton.addEventListener('click', enableEditMode);
+		cancelButton.addEventListener('click', cancelEditMode);
+		saveButton.addEventListener('click', saveEdit);
+
+		editWrapper.append(cancelButton, editButton, saveButton);
+
+		questionsContainer.append(editWrapper);
 	}
 
 	changePage('quiz-page');
@@ -138,6 +166,8 @@ function createTextAndLabelInput(value, name) {
 	input.rows = name == 'question' ? '2' : '1';
 	input.columns = name == 'question' ? '50' : '30';
 	input.classList.add('inactive');
+	input.style.resize = 'none';
+	input.id = name;
 	let label = document.createElement('label');
 	label.for = name;
 	label.classList.add('inactive');
@@ -146,25 +176,137 @@ function createTextAndLabelInput(value, name) {
 }
 
 function enableEditMode() {
+	let cancelButton = document.querySelector('#cancel-edit');
+	cancelButton.classList.remove('inactive');
+
+	let editButton = document.querySelector('#enable-edit');
+	editButton.classList.add('inactive');
+
+	let saveButton = document.querySelector('#save-edit');
+	saveButton.classList.remove('inactive');
+
 	document.querySelectorAll('.question-wrapper').forEach((questionWrapper) => {
 		for (let childEle of questionWrapper.childNodes) {
 			if (childEle.nodeName.toLowerCase() == 'textarea' || childEle.nodeName.toLowerCase() == 'label') {
 				childEle.classList.remove('inactive');
 				childEle.classList.add('active');
+			} else {
+				childEle.classList.add('inactive');
 			}
 		}
 	});
 }
 
-loadQuizzes();
+function cancelEditMode() {
+	let cancelButton = document.querySelector('#cancel-edit');
+	cancelButton.classList.add('inactive');
 
-function getUserInfo() {
-	GetData(API_URL + '/getUserData', {userId: userId}).then((data) => {
-		data = JSON.parse(data.body);
-		if (data.status == 'Success') {
-			displayUserInfo(data.user);
-		} else if (data.status == 'Failed') {
-			console.error(data.message);
+	let editButton = document.querySelector('#enable-edit');
+	editButton.classList.remove('inactive');
+
+	let saveButton = document.querySelector('#save-edit');
+	saveButton.classList.add('inactive');
+
+	document.querySelectorAll('.question-wrapper').forEach((questionWrapper) => {
+		for (let childEle of questionWrapper.childNodes) {
+			if (childEle.nodeName.toLowerCase() == 'textarea' || childEle.nodeName.toLowerCase() == 'label') {
+				childEle.classList.add('inactive');
+				childEle.classList.remove('active');
+			} else {
+				childEle.classList.remove('inactive');
+			}
 		}
 	});
 }
+
+function saveEdit() {
+	let cancelButton = document.querySelector('#cancel-edit');
+	cancelButton.classList.add('inactive');
+
+	let editButton = document.querySelector('#enable-edit');
+	editButton.classList.remove('inactive');
+
+	let saveButton = document.querySelector('#save-edit');
+	saveButton.classList.add('inactive');
+
+	let newQuizItem = {
+		quizName: document.querySelector('#quiz-page h2').innerText,
+		quizId: document.querySelector('#quiz-page h2').id,
+		quizContent: [],
+	};
+
+	document.querySelectorAll('.question-wrapper').forEach((questionWrapper) => {
+		let questionsAndAnswers = {};
+
+		for (let childEle of questionWrapper.childNodes) {
+			if (childEle.nodeName.toLowerCase() == 'textarea') {
+				let newText = childEle.value;
+				let previousSibling = childEle.previousSibling;
+				previousSibling.innerText = newText;
+
+				if (previousSibling.nodeName.toLowerCase() == 'h4') {
+					questionsAndAnswers[newText] = {
+						Correct: '',
+						Wrong: [],
+					};
+
+					for (let children of questionWrapper.childNodes) {
+						if (children.nodeName.toLowerCase() == 'p') {
+							children.setAttribute('data-question', newText);
+						}
+					}
+				} else {
+					if (previousSibling.id == 'Correct') {
+						questionsAndAnswers[previousSibling.getAttribute('data-question')].Correct = previousSibling.innerText;
+					} else {
+						questionsAndAnswers[previousSibling.getAttribute('data-question')].Wrong.push(previousSibling.innerText);
+					}
+				}
+
+				childEle.classList.add('inactive');
+				childEle.classList.remove('active');
+			} else if (childEle.nodeName.toLowerCase() == 'label') {
+				childEle.classList.add('inactive');
+				childEle.classList.remove('active');
+			} else {
+				childEle.classList.remove('inactive');
+			}
+		}
+
+		newQuizItem.quizContent.push(questionsAndAnswers);
+	});
+
+	for (let quiz of quizzes) {
+		if (quiz.quizId == newQuizItem.quizId) {
+			quiz = newQuizItem;
+		}
+	}
+	PostData(API_URL + '/updatequiz', newQuizItem).then((data) => {
+		data = JSON.parse(data.body);
+		if (data.Status == 'Success') {
+			console.log('Update succeeded');
+		} else if (data.Status == 'Failed') {
+			console.error('UPDATE FAILED');
+		}
+	});
+}
+
+function getUserInfo() {
+	GetData(API_URL + '/getuser?userId=' + userId).then((data) => {
+		data = JSON.parse(data.body);
+		if (data.Status == 'Success') {
+			displayUserInfo(data.user);
+		} else if (data.Status == 'Failed') {
+			console.error('User not found');
+		}
+	});
+}
+
+function displayUserInfo(user) {
+	document.querySelector('#firstName').innerText = user.firstName;
+	document.querySelector('#lastName').innerText = user.lastName;
+	document.querySelector('#email').innerText = user.email;
+}
+
+loadQuizzes();
+getUserInfo();
