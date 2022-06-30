@@ -1,0 +1,6 @@
+{
+    "scripts": {
+      "clear": "jest --clearCache",
+      "test": "jest"
+    }
+  }
