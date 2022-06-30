@@ -31,3 +31,12 @@ body {
 .inactive {
     display: none;
 }
+
+div, ul {
+    border-radius: 10px;
+}
+
+span {
+    border-radius: 50%;
+    background-color: rgb(107, 213, 220);
+}
