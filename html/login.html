@@ -11,16 +11,16 @@
 	<body>
 		<div id="entry-container">
 			<div id="entry-toggle">
-				<button data-form="login-form">Login</button>
+				<button data-form="login-form" class="blue-background">Login</button>
 				<button data-form="reg-form">Register</button>
 			</div>
 			<p id="entry-err-message" style="display: none"></p>
-			<div class="entry-form-container active" id="login-form">
+			<div class="entry-form-container active-flex" id="login-form">
 				<label for="email">Email:</label>
 				<input name="email" type="text" />
 				<label for="password">Password:</label>
 				<input name="password" type="text" />
-				<input type="submit" value="Submit" />
+				<input class="blue-background" type="submit" value="Submit" />
 			</div>
 			<div class="entry-form-container inactive" id="reg-form">
 				<label for="firstName">First Name:</label>
@@ -33,7 +33,7 @@
 				<input name="password" type="text" />
 				<label for="confirmPassword">Confirm Password:</label>
 				<input name="confirmPassword" type="text" />
-				<input type="submit" value="Submit" />
+				<input class="blue-background" type="submit" value="Submit" />
 			</div>
 		</div>
 

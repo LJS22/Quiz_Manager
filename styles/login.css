@@ -1,11 +1,13 @@
 #entry-container {
-    height: 20vh;
-    width: 20vh;
+    height: 50vh;
+    width: 25vh;
     position: absolute;
-    top: calc(50% - 10vh);
+    top: calc(50% - 25vh);
     left: calc(50% - 10vh);
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    background-color: rgb(255, 255, 255);
 }
 
 #entry-toggle {
@@ -13,9 +15,31 @@
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+#entry-toggle button {
+    height: 75%;
+    width: 50%;
 }
 
 .entry-form-container {
-    height: 90%;
+    height: 50%;
     width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#reg-form {
+    height: 80%;
+}
+
+.entry-form-container input[type="submit"] {
+    height: 30px;
+    width: 80px
+}
+
+label {
+    font-size: large;
 }

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -18,6 +18,7 @@
 body {
     height: 100vh;
     width: 100vw;
+    background-color: #0c0c18
 }
 
 .active {
@@ -38,5 +39,27 @@ div, ul {
 
 span {
     border-radius: 50%;
-    background-color: rgb(107, 213, 220);
+    background-color: hsl(221,130.6%,77.4%);
+}
+
+button, input[type="submit"] {
+	background: rgb(163, 163, 163);
+	border: 2px solid #fff;
+	cursor: pointer;
+    border-radius: 15px;
+    font-size: large;
+    transition: background 0.5s;
+    transition: color 0.5s;
+}
+
+button:hover, input[type="submit"]:hover {
+	background: hsl(221,130.6%,32.4%);
+    color: #fff;
+    transition: background 0.5s;
+    transition: color 0.5s;
+}
+
+.blue-background {
+    background: hsl(221,130.6%,32.4%) !important;
+    color: #fff !important;
 }

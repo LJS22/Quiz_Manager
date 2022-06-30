@@ -5,6 +5,18 @@ let settingsButton = document.querySelector('header span#settings');
 let logoutButton = document.querySelector('.logout');
 let quizContainer = document.querySelector('#quiz-list');
 let closeButton = document.querySelector('#close');
+let settingsList = document.querySelector('header ul');
+
+if (userRole == 'GlobalAdmin') {
+	let editQuizTitle = document.querySelector('#edit-quiz-title');
+	let editQuizText = document.querySelector('#edit-quiz-text');
+
+	editQuizTitle.classList.add('active');
+	editQuizText.classList.add('active');
+
+	editQuizTitle.classList.remove('inactive');
+	editQuizText.classList.remove('inactive');
+}
 
 logoutButton.addEventListener('click', function (e) {
 	document.cookie = 'QM_UserRole' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite;';
@@ -17,6 +29,11 @@ closeButton.addEventListener('click', function (e) {
 });
 
 function changePage(pageId) {
+	if (settingsList.classList.contains('active')) {
+		settingsList.classList.remove('active');
+		settingsList.classList.add('inactive');
+	}
+
 	let currentPage = document.querySelector('section.active-flex');
 
 	if (pageId === currentPage.id) return;
@@ -37,8 +54,6 @@ document.querySelectorAll('[data-page]').forEach((pageButton) => {
 });
 
 settingsButton.addEventListener('click', function (e) {
-	let settingsList = document.querySelector('header ul');
-
 	if (settingsList.classList.contains('inactive')) {
 		settingsList.classList.add('active');
 		settingsList.classList.remove('inactive');
@@ -53,6 +68,7 @@ function loadQuizzes() {
 	GetData(API_URL + '/getallquizzes?userRole=' + getCookie('QM_UserRole')).then((data) => {
 		data = JSON.parse(data.body);
 		if (data.Status == 'Success') {
+			quizContainer.innerHTML = '';
 			quizzes = data.quizzes;
 			for (let quiz of data.quizzes) {
 				buildQuizCard(quiz);
@@ -133,16 +149,17 @@ function buildQuizPage(quiz) {
 		editWrapper.id = 'edit-buttons';
 
 		let cancelButton = document.createElement('button');
-		cancelButton.classList.add('inactive');
+		cancelButton.classList.add('inactive', 'blue-background');
 		cancelButton.id = 'cancel-edit';
 		cancelButton.innerText = 'Cancel Edit';
 
 		let editButton = document.createElement('button');
+		editButton.classList.add('blue-background');
 		editButton.id = 'enable-edit';
 		editButton.innerText = 'Edit Mode';
 
 		let saveButton = document.createElement('button');
-		saveButton.classList.add('inactive');
+		saveButton.classList.add('inactive', 'blue-background');
 		saveButton.id = 'save-edit';
 		saveButton.innerText = 'Save Changes';
 
@@ -163,8 +180,7 @@ function createTextAndLabelInput(value, name) {
 	input.type = 'text';
 	input.value = value;
 	input.name = name;
-	input.rows = name == 'question' ? '2' : '1';
-	input.columns = name == 'question' ? '50' : '30';
+	input.rows = name == 'question' ? '3' : '1';
 	input.classList.add('inactive');
 	input.style.resize = 'none';
 	input.id = name;
@@ -276,15 +292,10 @@ function saveEdit() {
 		newQuizItem.quizContent.push(questionsAndAnswers);
 	});
 
-	for (let quiz of quizzes) {
-		if (quiz.quizId == newQuizItem.quizId) {
-			quiz = newQuizItem;
-		}
-	}
 	PostData(API_URL + '/updatequiz', newQuizItem).then((data) => {
 		data = JSON.parse(data.body);
 		if (data.Status == 'Success') {
-			console.log('Update succeeded');
+			loadQuizzes();
 		} else if (data.Status == 'Failed') {
 			console.error('UPDATE FAILED');
 		}

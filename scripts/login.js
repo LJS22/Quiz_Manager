@@ -1,6 +1,9 @@
 let errorMessage = document.querySelector('#entry-err-message');
-
 let loginToggle = document.querySelector('#entry-toggle [data-form="login-form"]');
+let regToggle = document.querySelector('#entry-toggle [data-form="reg-form"]');
+let loginFormSubmit = document.querySelector('#login-form [type="submit"]');
+let regFormSubmit = document.querySelector('#reg-form [type="submit"]');
+
 loginToggle.addEventListener('click', function (e) {
 	errorMessage.style.display = 'none';
 
@@ -8,15 +11,16 @@ loginToggle.addEventListener('click', function (e) {
 	let regForm = document.querySelector('.entry-form-container#reg-form');
 
 	if (!loginForm.classList.contains('active')) {
-		loginForm.classList.add('active');
+		loginForm.classList.add('active-flex');
 		loginForm.classList.remove('inactive');
+		loginToggle.classList.add('blue-background');
 
-		regForm.classList.remove('active');
+		regForm.classList.remove('active-flex');
 		regForm.classList.add('inactive');
+		regToggle.classList.remove('blue-background');
 	}
 });
 
-let regToggle = document.querySelector('#entry-toggle [data-form="reg-form"]');
 regToggle.addEventListener('click', function (e) {
 	errorMessage.style.display = 'none';
 
@@ -24,15 +28,16 @@ regToggle.addEventListener('click', function (e) {
 	let regForm = document.querySelector('.entry-form-container#reg-form');
 
 	if (!regForm.classList.contains('active')) {
-		regForm.classList.add('active');
+		regForm.classList.add('active-flex');
 		regForm.classList.remove('inactive');
+		regToggle.classList.add('blue-background');
 
-		loginForm.classList.remove('active');
+		loginForm.classList.remove('active-flex');
 		loginForm.classList.add('inactive');
+		loginToggle.classList.remove('blue-background');
 	}
 });
 
-let loginFormSubmit = document.querySelector('#login-form [type="submit"]');
 loginFormSubmit.addEventListener('click', function (e) {
 	let email = document.querySelector('#login-form [name="email"]').value;
 	let password = document.querySelector('#login-form [name="password"]').value;
@@ -56,7 +61,6 @@ loginFormSubmit.addEventListener('click', function (e) {
 	});
 });
 
-let regFormSubmit = document.querySelector('#reg-form [type="submit"]');
 regFormSubmit.addEventListener('click', function (e) {
 	let firstName = document.querySelector('#reg-form [name="firstName"]').value;
 	let lastName = document.querySelector('#reg-form [name="lastName"]').value;
