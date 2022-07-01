@@ -173,3 +173,7 @@ textarea#correctAnswer {
 #user-display-info span {
     background-color: transparent !important;
 }
+
+#firstName, #lastName, #email {
+    cursor: default;
+}
